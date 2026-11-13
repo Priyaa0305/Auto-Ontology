@@ -1,0 +1,6 @@
+streamlit
+pandas
+SQLAlchemy
+psycopg[binary]
+python-dotenv
+PyYAML

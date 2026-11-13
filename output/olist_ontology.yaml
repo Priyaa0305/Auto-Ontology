@@ -1,0 +1,1088 @@
+metadata:
+  database: olist
+  generated_at: '2026-11-13T12:06:46.917741+00:00'
+  generation_method: PostgreSQL schema analysis + NVIDIA Auto Ontology + NVIDIA hosted
+    LLM
+  entity_count: 17
+  relationship_count: 18
+  nvidia_entity_count: 9
+  warnings: []
+entities:
+- name: Customer
+  table_name: customers
+  description: A collection of customer records containing identification, location,
+    and state information.
+  row_count: 99441
+  attributes:
+  - name: customer_id
+    meaning: A unique text identifier for each customer record.
+  - name: customer_unique_id
+    meaning: A unique text identifier used to distinguish customers across the dataset.
+  - name: customer_zip_code_prefix
+    meaning: The prefix portion of a customer's postal code, used for geographic grouping.
+  - name: customer_city
+    meaning: The city associated with the customer's location.
+  - name: customer_state
+    meaning: The state or federal unit associated with the customer's location.
+  primary_key_candidates:
+  - columns:
+    - customer_id
+    type: single_column
+    row_count: 99441
+    distinct_count: 99441
+    null_count: 0
+    confidence: 0.99
+    reason: All values are unique and non-null.
+  - columns:
+    - customer_id
+    - customer_unique_id
+    type: composite
+    row_count: 99441
+    distinct_count: 99441
+    null_count: 0
+    confidence: 0.95
+    reason: The column combination is unique and contains no NULL values.
+  nvidia_auto_ontology:
+    entity_id: c65e7480-d4ad-41a4-aeee-77217f9eb6ff
+    entity_name: Customer
+    description: Core customer record attributes
+    matched: true
+- name: Geolocation
+  table_name: geolocation
+  description: Records containing geographic location data including latitude, longitude,
+    city, state, and zip code prefix information.
+  row_count: 1000163
+  attributes:
+  - name: geolocation_zip_code_prefix
+    meaning: A text identifier representing the initial digits of a postal code used
+      to identify geographic regions.
+  - name: geolocation_lat
+    meaning: The latitude coordinate specifying the north-south position on the Earth's
+      surface as a decimal degree value.
+  - name: geolocation_lng
+    meaning: The longitude coordinate specifying the east-west position on the Earth's
+      surface as a decimal degree value.
+  - name: geolocation_city
+    meaning: The name of the city associated with the geographic location.
+  - name: geolocation_state
+    meaning: The name or abbreviation of the state or administrative region associated
+      with the geographic location.
+  primary_key_candidates: []
+  nvidia_auto_ontology:
+    entity_id: 244aad56-d168-463d-ab04-c3afbdbdb225
+    entity_name: Geolocation
+    description: Stores geographic location data for delivery areas and coordinates
+    matched: true
+- name: Order Item
+  table_name: order_items
+  description: Records of individual line items within customer orders, capturing
+    product details, pricing, and shipping constraints.
+  row_count: 112650
+  attributes:
+  - name: order_id
+    meaning: A unique identifier for the order containing this item.
+  - name: order_item_id
+    meaning: A unique identifier for this specific line item within its order.
+  - name: product_id
+    meaning: A unique identifier for the product in this line item.
+  - name: seller_id
+    meaning: A unique identifier for the seller offering this product.
+  - name: shipping_limit_date
+    meaning: The deadline date and time by which the item must be shipped.
+  - name: price
+    meaning: The unit price of the product in this line item.
+  - name: freight_value
+    meaning: The shipping cost associated with this line item.
+  primary_key_candidates:
+  - columns:
+    - order_id
+    - order_item_id
+    type: composite
+    row_count: 112650
+    distinct_count: 112650
+    null_count: 0
+    confidence: 0.95
+    reason: The column combination is unique and contains no NULL values.
+  nvidia_auto_ontology:
+    entity_id: fb288421-04f2-4eac-9029-2d1ac673d639
+    entity_name: Order Item
+    description: Represents individual line items within customer orders, linking
+      products, sellers, pricing, and shipping constraints.
+    matched: true
+- name: Order Payments
+  table_name: order_payments
+  description: Records of individual payment transactions associated with orders,
+    capturing payment method, installment structure, and monetary value.
+  row_count: 103886
+  attributes:
+  - name: order_id
+    meaning: A unique identifier for the order associated with this payment record.
+  - name: payment_sequential
+    meaning: The sequential number indicating the order of this payment within a series
+      of installments for a single order.
+  - name: payment_type
+    meaning: The method or instrument used to make the payment, such as credit card,
+      debit card, boleto, or voucher.
+  - name: payment_installments
+    meaning: The total number of installments planned or executed for this payment.
+  - name: payment_value
+    meaning: The monetary amount of the payment transaction.
+  primary_key_candidates:
+  - columns:
+    - order_id
+    - payment_sequential
+    type: composite
+    row_count: 103886
+    distinct_count: 103886
+    null_count: 0
+    confidence: 0.95
+    reason: The column combination is unique and contains no NULL values.
+  nvidia_auto_ontology:
+    entity_id: 92446212-8781-4c6b-8a58-47244e0752a6
+    entity_name: Order Payments
+    description: Represents individual payment transactions associated with customer
+      orders.
+    matched: true
+- name: Order Review
+  table_name: order_reviews
+  description: Records of customer reviews for orders, containing review metadata,
+    scoring, and optional comments.
+  row_count: 99224
+  attributes:
+  - name: review_id
+    meaning: A unique identifier for each review record.
+  - name: order_id
+    meaning: The identifier of the order associated with the review.
+  - name: review_score
+    meaning: A numeric score given by the customer, ranging from 1 to 5.
+  - name: review_comment_title
+    meaning: An optional short title or label provided by the reviewer.
+  - name: review_comment_message
+    meaning: An optional detailed text message written by the reviewer.
+  - name: review_creation_date
+    meaning: The date and time when the review was originally created.
+  - name: review_answer_timestamp
+    meaning: The date and time when a response to the review was recorded.
+  primary_key_candidates:
+  - columns:
+    - review_id
+    - order_id
+    type: composite
+    row_count: 99224
+    distinct_count: 99224
+    null_count: 0
+    confidence: 0.95
+    reason: The column combination is unique and contains no NULL values.
+  nvidia_auto_ontology:
+    entity_id: b0868a61-bb65-4bbd-80e8-5621d924b1f8
+    entity_name: Order Review
+    description: Customer reviews linked to orders
+    matched: true
+- name: Orders
+  table_name: orders
+  description: A record of customer orders tracking purchase, approval, and delivery
+    timelines.
+  row_count: 99441
+  attributes:
+  - name: order_id
+    meaning: A unique identifier for each order record.
+  - name: customer_id
+    meaning: A unique identifier for the customer who placed the order.
+  - name: order_status
+    meaning: The current status of the order, such as shipped, approved, or delivered.
+  - name: order_purchase_timestamp
+    meaning: The date and time when the order was purchased.
+  - name: order_approved_at
+    meaning: The date and time when the order was approved. Some records may be missing
+      this value.
+  - name: order_delivered_carrier_date
+    meaning: The date and time when the order was delivered to the carrier. Some records
+      may be missing this value.
+  - name: order_delivered_customer_date
+    meaning: The date and time when the order was delivered to the customer. Some
+      records may be missing this value.
+  - name: order_estimated_delivery_date
+    meaning: The estimated date and time when the order was expected to be delivered.
+  primary_key_candidates:
+  - columns:
+    - order_id
+    type: single_column
+    row_count: 99441
+    distinct_count: 99441
+    null_count: 0
+    confidence: 0.99
+    reason: All values are unique and non-null.
+  - columns:
+    - customer_id
+    type: single_column
+    row_count: 99441
+    distinct_count: 99441
+    null_count: 0
+    confidence: 0.99
+    reason: All values are unique and non-null.
+  - columns:
+    - order_id
+    - customer_id
+    type: composite
+    row_count: 99441
+    distinct_count: 99441
+    null_count: 0
+    confidence: 0.95
+    reason: The column combination is unique and contains no NULL values.
+  nvidia_auto_ontology:
+    entity_id: null
+    entity_name: null
+    description: null
+    matched: false
+- name: Products
+  table_name: products
+  description: A catalog of products with physical dimensions, weight, and descriptive
+    metadata. The dataset contains 32,951 unique product entries across 73 categories,
+    with measurements in centimeters and grams.
+  row_count: 32951
+  attributes:
+  - name: product_id
+    meaning: A unique text identifier for each product record.
+  - name: product_category_name
+    meaning: The category to which the product belongs, with 73 distinct categories
+      observed.
+  - name: product_name_lenght
+    meaning: The length of the product name measured in characters or units, with
+      values ranging from 13 to 46.
+  - name: product_description_lenght
+    meaning: The length of the product description measured in characters or units,
+      with values ranging from 1487 to 2679.
+  - name: product_photos_qty
+    meaning: The quantity of photos associated with the product, with observed values
+      between 1 and 12.
+  - name: product_weight_g
+    meaning: The weight of the product in grams, with values ranging from 247g to
+      11517g.
+  - name: product_length_cm
+    meaning: The length of the product in centimeters, with values ranging from 16cm
+      to 90cm.
+  - name: product_height_cm
+    meaning: The height of the product in centimeters, with values ranging from 16cm
+      to 90cm.
+  - name: product_width_cm
+    meaning: The width of the product in centimeters, with values ranging from 16cm
+      to 90cm.
+  primary_key_candidates:
+  - columns:
+    - product_id
+    type: single_column
+    row_count: 32951
+    distinct_count: 32951
+    null_count: 0
+    confidence: 0.99
+    reason: All values are unique and non-null.
+  nvidia_auto_ontology:
+    entity_id: 0a720190-cdd5-4bc9-b76a-81ede274afb7
+    entity_name: Products
+    description: Core entity representing catalog items in the system.
+    matched: true
+- name: Seller
+  table_name: sellers
+  description: A registry of sellers with their location details and unique identifiers.
+  row_count: 3095
+  attributes:
+  - name: seller_id
+    meaning: A unique text identifier for each seller in the system.
+  - name: seller_zip_code_prefix
+    meaning: The first five digits of the seller's postal code used for location identification.
+  - name: seller_city
+    meaning: The city where the seller is located.
+  - name: seller_state
+    meaning: The state or province where the seller is located.
+  primary_key_candidates:
+  - columns:
+    - seller_id
+    type: single_column
+    row_count: 3095
+    distinct_count: 3095
+    null_count: 0
+    confidence: 0.99
+    reason: All values are unique and non-null.
+  nvidia_auto_ontology:
+    entity_id: cf24cc04-8744-4c78-b20c-bdfa54f0017d
+    entity_name: Seller
+    description: Core seller entity record
+    matched: true
+- name: olist_customers_dataset
+  table_name: olist_customers_dataset
+  description: Customer dataset from Olist e-commerce platform containing customer
+    identification and location information.
+  row_count: 99441
+  attributes:
+  - name: customer_id
+    meaning: Unique identifier for each customer record in the dataset.
+  - name: customer_unique_id
+    meaning: Alternative unique identifier used to distinguish customers, potentially
+      from external systems or sessions.
+  - name: customer_zip_code_prefix
+    meaning: First digits of the customer's postal code, used for geographic segmentation
+      and regional analysis.
+  - name: customer_city
+    meaning: City where the customer is located, representing their primary geographic
+      location.
+  - name: customer_state
+    meaning: State or federal unit where the customer resides, used for regional grouping
+      and analysis.
+  primary_key_candidates:
+  - columns:
+    - customer_id
+    type: single_column
+    row_count: 99441
+    distinct_count: 99441
+    null_count: 0
+    confidence: 0.99
+    reason: All values are unique and non-null.
+  - columns:
+    - customer_id
+    - customer_unique_id
+    type: composite
+    row_count: 99441
+    distinct_count: 99441
+    null_count: 0
+    confidence: 0.95
+    reason: The column combination is unique and contains no NULL values.
+  nvidia_auto_ontology:
+    entity_id: null
+    entity_name: null
+    description: null
+    matched: false
+- name: Geolocation dataset
+  table_name: olist_geolocation_dataset
+  description: A dataset containing geographic location information including latitude,
+    longitude, city, state, and zip code prefixes.
+  row_count: 1000163
+  attributes:
+  - name: geolocation_zip_code_prefix
+    meaning: A text identifier representing the postal code prefix associated with
+      a geographic location.
+  - name: geolocation_lat
+    meaning: The latitude coordinate specifying the north-south position on the Earth's
+      surface as a decimal number.
+  - name: geolocation_lng
+    meaning: The longitude coordinate specifying the east-west position on the Earth's
+      surface as a decimal number.
+  - name: geolocation_city
+    meaning: The name of the city associated with the geographic location.
+  - name: geolocation_state
+    meaning: The name or abbreviation of the state or administrative region associated
+      with the geographic location.
+  primary_key_candidates: []
+  nvidia_auto_ontology:
+    entity_id: null
+    entity_name: null
+    description: null
+    matched: false
+- name: Order Item Transaction Record
+  table_name: olist_order_items_dataset
+  description: A dataset recording individual line items within customer orders from
+    an e-commerce platform, capturing pricing, shipping constraints, and seller information.
+  row_count: 112650
+  attributes:
+  - name: order_id
+    meaning: A unique identifier for a customer order, grouping multiple line items
+      together.
+  - name: order_item_id
+    meaning: A unique identifier for a specific line item within an order, allowing
+      multiple items per order to be distinguished.
+  - name: product_id
+    meaning: A unique identifier for the specific product purchased in the order item.
+  - name: seller_id
+    meaning: A unique identifier for the seller or merchant offering the product in
+      the order item.
+  - name: shipping_limit_date
+    meaning: The deadline date and time by which the order item must be shipped to
+      meet delivery expectations.
+  - name: price
+    meaning: The listed price of the product for this specific order item, represented
+      as a monetary value.
+  - name: freight_value
+    meaning: The shipping or freight cost associated with delivering this specific
+      order item.
+  primary_key_candidates:
+  - columns:
+    - order_id
+    - order_item_id
+    type: composite
+    row_count: 112650
+    distinct_count: 112650
+    null_count: 0
+    confidence: 0.95
+    reason: The column combination is unique and contains no NULL values.
+  nvidia_auto_ontology:
+    entity_id: null
+    entity_name: null
+    description: null
+    matched: false
+- name: Order Payment Records
+  table_name: olist_order_payments_dataset
+  description: Records of payment transactions associated with orders in the dataset,
+    capturing the method, structure, and monetary value of each payment.
+  row_count: 103886
+  attributes:
+  - name: order_id
+    meaning: A unique identifier for the order associated with the payment record.
+  - name: payment_sequential
+    meaning: A sequential number indicating the order of this payment if an order
+      has multiple payments.
+  - name: payment_type
+    meaning: The method or type used to complete the payment (e.g., credit card, boleto).
+  - name: payment_installments
+    meaning: The number of installments over which the payment is divided.
+  - name: payment_value
+    meaning: The monetary value of the payment transaction.
+  primary_key_candidates:
+  - columns:
+    - order_id
+    - payment_sequential
+    type: composite
+    row_count: 103886
+    distinct_count: 103886
+    null_count: 0
+    confidence: 0.95
+    reason: The column combination is unique and contains no NULL values.
+  nvidia_auto_ontology:
+    entity_id: null
+    entity_name: null
+    description: null
+    matched: false
+- name: Customer Review Records
+  table_name: olist_order_reviews_dataset
+  description: Records of customer reviews for orders in the database, containing
+    review scores, timestamps, and optional comment text.
+  row_count: 99224
+  attributes:
+  - name: review_id
+    meaning: A unique identifier for each review record.
+  - name: order_id
+    meaning: The identifier linking the review to a specific order.
+  - name: review_score
+    meaning: A numeric score given by the customer, ranging from 1 to 5 based on the
+      distinct values observed.
+  - name: review_comment_title
+    meaning: An optional short title or label associated with the review comment.
+  - name: review_comment_message
+    meaning: An optional detailed text message written by the customer about their
+      experience.
+  - name: review_creation_date
+    meaning: The date and time when the review was originally created.
+  - name: review_answer_timestamp
+    meaning: The date and time when a response to the review was recorded.
+  primary_key_candidates:
+  - columns:
+    - review_id
+    - order_id
+    type: composite
+    row_count: 99224
+    distinct_count: 99224
+    null_count: 0
+    confidence: 0.95
+    reason: The column combination is unique and contains no NULL values.
+  nvidia_auto_ontology:
+    entity_id: null
+    entity_name: null
+    description: null
+    matched: false
+- name: Purchase Order
+  table_name: olist_orders_dataset
+  description: A dataset containing records of customer orders with timestamps for
+    purchase, approval, delivery, and estimated delivery dates.
+  row_count: 99441
+  attributes:
+  - name: order_id
+    meaning: A unique identifier for each order transaction.
+  - name: customer_id
+    meaning: A unique identifier for the customer who placed the order.
+  - name: order_status
+    meaning: The current state of the order, such as delivered, shipped, or created.
+  - name: order_purchase_timestamp
+    meaning: The date and time when the customer placed the order.
+  - name: order_approved_at
+    meaning: The date and time when the order was approved for processing. Some entries
+      may be missing.
+  - name: order_delivered_carrier_date
+    meaning: The date and time when the order was handed over to the delivery carrier.
+      Some entries may be missing.
+  - name: order_delivered_customer_date
+    meaning: The date and time when the order was delivered to the customer. Some
+      entries may be missing.
+  - name: order_estimated_delivery_date
+    meaning: The date by which the order was estimated to be delivered. The date format
+      uses midnight (00:00:00) as the default time.
+  primary_key_candidates:
+  - columns:
+    - order_id
+    type: single_column
+    row_count: 99441
+    distinct_count: 99441
+    null_count: 0
+    confidence: 0.99
+    reason: All values are unique and non-null.
+  - columns:
+    - customer_id
+    type: single_column
+    row_count: 99441
+    distinct_count: 99441
+    null_count: 0
+    confidence: 0.99
+    reason: All values are unique and non-null.
+  - columns:
+    - order_id
+    - customer_id
+    type: composite
+    row_count: 99441
+    distinct_count: 99441
+    null_count: 0
+    confidence: 0.95
+    reason: The column combination is unique and contains no NULL values.
+  nvidia_auto_ontology:
+    entity_id: cf63cd0e-f5bf-47aa-a5a1-850670554c8b
+    entity_name: Purchase Order
+    description: Core order entity encompassing all transactional and lifecycle fields.
+    matched: true
+- name: Olist Product Catalog
+  table_name: olist_products_dataset
+  description: A dataset containing product records from the Olist e-commerce platform,
+    capturing basic product metadata including dimensions, weight, photography, and
+    textual attributes.
+  row_count: 32951
+  attributes:
+  - name: product_id
+    meaning: A unique text identifier for each product in the catalog. All 32,951
+      distinct IDs are non-null, serving as the primary key for product records.
+  - name: product_category_name
+    meaning: The textual category assigned to the product. 73 distinct categories
+      exist, with a small null rate of 0.0185% (610 rows). Sample categories include
+      'climatizacao', 'livros_importados', and 'artigos_de_natal'.
+  - name: product_name_lenght
+    meaning: The length of the product name measured in characters. This is a numeric
+      value stored as double precision. 610 null values exist (0.0185% of rows). Sample
+      values range from 13 to 46 characters.
+  - name: product_description_lenght
+    meaning: The length of the product description measured in characters. Stored
+      as double precision. 610 null values exist (0.0185% of rows). Distinct count
+      of 2,960 suggests varied description lengths across the catalog.
+  - name: product_photos_qty
+    meaning: The quantity of product photos associated with the listing. Stored as
+      double precision. 610 null values exist (0.0185% of rows). Distinct values are
+      limited to 19, with common counts being 1, 4, 8, and 12.
+  - name: product_weight_g
+    meaning: The weight of the product in grams. Stored as double precision. Only
+      2 null values exist (0.0001% of rows), indicating near-complete coverage. Distinct
+      count is high at 2,204, reflecting a wide range of product weights.
+  - name: product_length_cm
+    meaning: The length of the product in centimeters. Stored as double precision.
+      Only 2 null values exist (0.0001% of rows). Distinct count is 99, with sample
+      values including 16cm, 26cm, 50cm, and 89cm.
+  - name: product_height_cm
+    meaning: The height of the product in centimeters. Stored as double precision.
+      Only 2 null values exist (0.0001% of rows). Distinct count is 102, with sample
+      values overlapping with length measurements, suggesting standard sizing patterns.
+  - name: product_width_cm
+    meaning: The width of the product in centimeters. Stored as double precision.
+      Only 2 null values exist (0.0001% of rows). Distinct count is 95, with sample
+      values including 16cm, 26cm, 50cm, 84cm, and 90cm.
+  primary_key_candidates:
+  - columns:
+    - product_id
+    type: single_column
+    row_count: 32951
+    distinct_count: 32951
+    null_count: 0
+    confidence: 0.99
+    reason: All values are unique and non-null.
+  nvidia_auto_ontology:
+    entity_id: null
+    entity_name: null
+    description: null
+    matched: false
+- name: olist_sellers_dataset
+  table_name: olist_sellers_dataset
+  description: A dataset containing seller information from the Olist e-commerce platform,
+    including seller identifiers, location details, and state information.
+  row_count: 3095
+  attributes:
+  - name: seller_id
+    meaning: A unique text identifier for each seller in the Olist platform.
+  - name: seller_zip_code_prefix
+    meaning: The first five digits of the seller's postal code, used to identify the
+      general geographic region.
+  - name: seller_city
+    meaning: The city where the seller is located.
+  - name: seller_state
+    meaning: The state abbreviation where the seller is located.
+  primary_key_candidates:
+  - columns:
+    - seller_id
+    type: single_column
+    row_count: 3095
+    distinct_count: 3095
+    null_count: 0
+    confidence: 0.99
+    reason: All values are unique and non-null.
+  nvidia_auto_ontology:
+    entity_id: null
+    entity_name: null
+    description: null
+    matched: false
+- name: Product Category Name Translation
+  table_name: product_category_name_translation
+  description: A mapping table that translates Portuguese product category names into
+    their English equivalents, enabling language localization for product catalogs.
+  row_count: 71
+  attributes:
+  - name: product_category_name
+    meaning: The original product category name in Portuguese, representing a specific
+      category within the product database.
+  - name: product_category_name_english
+    meaning: The translated product category name in English, providing the equivalent
+      label for the corresponding Portuguese category.
+  primary_key_candidates:
+  - columns:
+    - product_category_name
+    type: single_column
+    row_count: 71
+    distinct_count: 71
+    null_count: 0
+    confidence: 0.9
+    reason: All values are unique and non-null.
+  - columns:
+    - product_category_name_english
+    type: single_column
+    row_count: 71
+    distinct_count: 71
+    null_count: 0
+    confidence: 0.9
+    reason: All values are unique and non-null.
+  nvidia_auto_ontology:
+    entity_id: bfd7f59e-50fd-40cd-bdc4-2bd719fbac84
+    entity_name: Product Category Name Translation
+    description: Stores product category names in multiple languages
+    matched: true
+relationships:
+- from:
+    table: order_items
+    column: order_id
+  to:
+    table: orders
+    column: order_id
+  relationship_name: belongs_to
+  description: Each order item belongs to exactly one order. The order_id in order_items
+    references the order_id in the orders table.
+  reasoning: 'The column names ''order_id'' in both tables clearly indicate the same
+    business concept (an order identifier). The data evidence confirms semantic validity:
+    98,666 child values match parent values with 100% coverage, and the parent column
+    is unique, establishing a proper many-to-one relationship. The data types are
+    inherently compatible as they represent the same identifier concept. In the business
+    context, this is a standard order-item relationship where items are components
+    of orders.'
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 98666
+    child_distinct_values: 98666
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+- from:
+    table: order_items
+    column: product_id
+  to:
+    table: products
+    column: product_id
+  relationship_name: belongs_to
+  description: Each order item references a product in the products catalog, establishing
+    a standard many-to-one relationship between line items and their associated products.
+  reasoning: The relationship is semantically sound. The column names 'product_id'
+    in both tables clearly indicate the same business concept - products. The parent
+    table's product_id is unique, and all 32,951 child values match values in the
+    parent table with 100% coverage. The data types are inherently compatible as both
+    are identifiers. In the business context, an order item must reference an existing
+    product, making this a valid foreign key relationship.
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 32951
+    child_distinct_values: 32951
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+- from:
+    table: order_items
+    column: seller_id
+  to:
+    table: sellers
+    column: seller_id
+  relationship_name: belongs_to
+  description: Each order item is associated with a seller through the seller_id foreign
+    key.
+  reasoning: The relationship is semantically reasonable. The column names 'seller_id'
+    in both the order_items and sellers tables clearly indicate the same business
+    concept (a seller). The data types are compatible as foreign keys. The parent
+    column (sellers.seller_id) is unique, which is a requirement for a valid parent
+    table. All 3095 child values in order_items match values in the sellers table,
+    achieving 100% coverage. In the business context, an order item must be sold by
+    a seller, making this a standard many-to-one relationship.
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 3095
+    child_distinct_values: 3095
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+- from:
+    table: order_payments
+    column: order_id
+  to:
+    table: orders
+    column: order_id
+  relationship_name: belongs_to
+  description: Each order_payment record references an order via order_id, establishing
+    a many-to-one relationship where multiple payments can belong to a single order.
+  reasoning: 'The column names ''order_id'' in both tables strongly suggest the same
+    business concept (linking payments to orders). The data evidence confirms semantic
+    alignment: 99,440 child values match parent values with 100% coverage, and the
+    parent order_id is unique. The relationship is logically sound as payments are
+    naturally associated with orders in a business context.'
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 99440
+    child_distinct_values: 99440
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+- from:
+    table: order_reviews
+    column: order_id
+  to:
+    table: orders
+    column: order_id
+  relationship_name: belongs_to
+  description: Each order review belongs to exactly one order. The order_reviews table
+    references orders via the order_id foreign key.
+  reasoning: The column names 'order_id' in both tables indicate the same business
+    concept (linking reviews to orders). The parent column order_id is unique in the
+    orders table, and all 98673 child order_id values match values in the parent table
+    with 100% coverage. The data types are compatible (both likely integers). The
+    relationship is standard for an order review system where reviews are associated
+    with specific orders.
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 98673
+    child_distinct_values: 98673
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+- from:
+    table: orders
+    column: customer_id
+  to:
+    table: customers
+    column: customer_id
+  relationship_name: belongs_to
+  description: Each order is associated with a specific customer. The orders table
+    references the customers table via customer_id to establish ownership and enable
+    customer-order analysis.
+  reasoning: The relationship is semantically sound. The column names 'customer_id'
+    in both tables clearly indicate the same business concept (a customer identifier).
+    The parent column (customers.customer_id) is unique, which is a requirement for
+    a valid foreign key relationship. The child values (orders.customer_id) match
+    values in the parent (customers.customer_id) with 100% coverage, and the child
+    has 99,441 distinct values corresponding to the 99,441 matching records. This
+    structure properly models the business rule that orders belong to customers.
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 99441
+    child_distinct_values: 99441
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+- from:
+    table: products
+    column: product_category_name
+  to:
+    table: product_category_name_translation
+    column: product_category_name
+  relationship_name: belongs_to
+  description: Each product belongs to a product category, with category names mapped
+    across languages in the translation table.
+  reasoning: 'The column names ''product_category_name'' in both tables suggest the
+    same business concept of categorizing products. The parent column is unique (parent_is_unique:
+    true), ensuring referential integrity. With 71 matching values out of 73 distinct
+    child values and a coverage of 0.9726, the vast majority of child records have
+    corresponding parent records. The data_based_confidence of 0.9863 indicates strong
+    consistency between the tables. This relationship makes sense in an e-commerce
+    context where products are organized into categories that may have multilingual
+    names.'
+  confidence: 0.9863
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 71
+    child_distinct_values: 73
+    coverage: 0.9726
+    parent_is_unique: true
+    data_based_confidence: 0.9863
+- from:
+    table: olist_customers_dataset
+    column: customer_id
+  to:
+    table: customers
+    column: customer_id
+  relationship_name: belongs_to
+  description: Each customer in the olist_customers_dataset table is associated with
+    a customer in the customers table via the customer_id column.
+  reasoning: The relationship is semantically reasonable. Both tables use 'customer_id'
+    as the identifier, suggesting they represent the same business entity (a customer).
+    The parent column (customers.customer_id) is unique, and all 99,441 distinct child
+    values exist in the parent table, indicating full referential integrity. The 100%
+    coverage and data-based confidence confirm that every customer in the dataset
+    has a corresponding entry in the parent table.
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 99441
+    child_distinct_values: 99441
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+- from:
+    table: olist_order_items_dataset
+    column: order_id
+  to:
+    table: orders
+    column: order_id
+  relationship_name: belongs_to
+  description: Each order item belongs to exactly one order. The order_id in olist_order_items_dataset
+    references the primary key in the orders table.
+  reasoning: '1. Column names suggest the same business concept (order_id in both
+    tables). 2. Data types are compatible as both are likely integers/strings representing
+    the same identifier. 3. Parent column is unique (confirmed by data_based_confidence:
+    1.0). 4. Child values match values in the parent (98666 matching values with 1.0
+    coverage). 5. Business context makes sense: order items are components of orders.'
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 98666
+    child_distinct_values: 98666
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+- from:
+    table: olist_order_items_dataset
+    column: product_id
+  to:
+    table: products
+    column: product_id
+  relationship_name: belongs_to
+  description: Each order item in the olist_order_items_dataset references a specific
+    product from the products table via the product_id column.
+  reasoning: 'The relationship is semantically reasonable. The column names ''product_id''
+    in both tables indicate the same business concept (a product identifier). The
+    data evidence confirms a perfect match: all 32,951 distinct child values exist
+    in the parent table, and the parent column is unique, ensuring referential integrity.
+    The 1.0 coverage and confidence values further validate that every order item
+    points to a valid, existing product.'
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 32951
+    child_distinct_values: 32951
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+- from:
+    table: olist_order_items_dataset
+    column: seller_id
+  to:
+    table: sellers
+    column: seller_id
+  relationship_name: belongs_to
+  description: Each order item is associated with a seller from the sellers table.
+  reasoning: The seller_id column in olist_order_items_dataset references the seller_id
+    primary key in the sellers table. With 3095 matching values, full coverage (1.0),
+    and the parent column being unique, every order item is linked to a valid seller.
+    The column names consistently represent the same business concept across both
+    tables.
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 3095
+    child_distinct_values: 3095
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+- from:
+    table: olist_order_payments_dataset
+    column: order_id
+  to:
+    table: orders
+    column: order_id
+  relationship_name: belongs_to
+  description: Each payment record in olist_order_payments_dataset belongs to a specific
+    order in the orders table via the order_id foreign key.
+  reasoning: The relationship is semantically reasonable. Both tables use 'order_id'
+    as the column name, strongly suggesting they reference the same business concept.
+    The parent column (orders.order_id) is unique, and all 99,440 child values match
+    values in the parent table with 100% coverage. The data types are compatible,
+    and the relationship makes logical sense in an e-commerce context where payments
+    are associated with specific orders.
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 99440
+    child_distinct_values: 99440
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+- from:
+    table: olist_order_reviews_dataset
+    column: order_id
+  to:
+    table: orders
+    column: order_id
+  relationship_name: belongs_to
+  description: Each review in the olist_order_reviews_dataset is associated with a
+    specific order from the orders table.
+  reasoning: The relationship is semantically sound. Both tables use 'order_id' as
+    the linking column, indicating they reference the same business concept. The parent
+    column (orders.order_id) is unique, and all 98,673 child records have matching
+    values in the parent table with 100% coverage. The data types are compatible,
+    and the relationship accurately reflects that orders can have associated reviews.
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 98673
+    child_distinct_values: 98673
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+- from:
+    table: olist_orders_dataset
+    column: order_id
+  to:
+    table: orders
+    column: order_id
+  relationship_name: belongs_to
+  description: Each order in the olist_orders_dataset table references a unique order
+    in the parent orders table via the order_id column.
+  reasoning: The relationship is semantically reasonable. Both tables use 'order_id'
+    as the column name, strongly suggesting they represent the same business concept.
+    The parent column 'order_id' is unique, and all 99,441 child values match values
+    in the parent table with 100% coverage. The data types are compatible, and the
+    relationship makes logical sense in an e-commerce context where orders are stored
+    in a normalized parent table and referenced by detail datasets.
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 99441
+    child_distinct_values: 99441
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+- from:
+    table: olist_orders_dataset
+    column: customer_id
+  to:
+    table: customers
+    column: customer_id
+  relationship_name: belongs_to
+  description: Each order in the olist_orders_dataset is associated with a specific
+    customer from the customers table.
+  reasoning: The relationship is semantically reasonable. Both columns are named customer_id,
+    strongly suggesting they represent the same business concept of a customer identifier.
+    The data evidence confirms that all 99,441 child records reference values that
+    exist in the parent table, with 100% coverage. The parent column (customers.customer_id)
+    is unique, and the child column contains 99,441 distinct values, all matching
+    parent values. This is a standard foreign key relationship where orders belong
+    to customers.
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 99441
+    child_distinct_values: 99441
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+- from:
+    table: olist_products_dataset
+    column: product_id
+  to:
+    table: products
+    column: product_id
+  relationship_name: belongs_to
+  description: Each product in the olist_products_dataset table is associated with
+    a product in the parent products table via the product_id column.
+  reasoning: 'The relationship is semantically reasonable. Both tables use ''product_id''
+    as the column name, strongly suggesting the same business concept. The data evidence
+    confirms a perfect match: all 32,951 distinct child values exist in the parent,
+    and the parent column is unique, indicating a valid many-to-one relationship.
+    The 1.0 coverage and confidence values further validate that every child record
+    has a corresponding parent record.'
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 32951
+    child_distinct_values: 32951
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+- from:
+    table: olist_products_dataset
+    column: product_category_name
+  to:
+    table: product_category_name_translation
+    column: product_category_name
+  relationship_name: belongs_to
+  description: Each product in olist_products_dataset belongs to a category defined
+    in product_category_name_translation.
+  reasoning: The column names 'product_category_name' in both tables suggest the same
+    business concept of product categorization. The parent column is unique, ensuring
+    referential integrity. With 71 matching values out of 73 distinct child values
+    and 97.26% coverage, the vast majority of child records have corresponding parent
+    records. The data types are compatible as both are likely string-based category
+    identifiers. In the business context, products are logically organized into categories,
+    and this relationship supports that structure.
+  confidence: 0.9863
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 71
+    child_distinct_values: 73
+    coverage: 0.9726
+    parent_is_unique: true
+    data_based_confidence: 0.9863
+- from:
+    table: olist_sellers_dataset
+    column: seller_id
+  to:
+    table: sellers
+    column: seller_id
+  relationship_name: belongs_to
+  description: Each seller in the olist_sellers_dataset table is associated with a
+    unique seller_id in the sellers table, establishing a standard parent-child referential
+    integrity relationship.
+  reasoning: The relationship is semantically reasonable. The column names 'seller_id'
+    in both tables clearly indicate the same business concept (a unique identifier
+    for a seller). The data evidence confirms that all 3095 distinct child values
+    exist in the parent, the parent column is unique, and there is 100% coverage,
+    confirming valid referential integrity. The business context of an e-commerce
+    dataset further supports that sellers are primary entities linked to their sales
+    data.
+  confidence: 1.0
+  validation_status: semantically_validated
+  evidence:
+    matching_values: 3095
+    child_distinct_values: 3095
+    coverage: 1.0
+    parent_is_unique: true
+    data_based_confidence: 1.0
+nvidia_semantic_graph:
+  node_count: 9
+  link_count: 0

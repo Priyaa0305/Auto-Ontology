@@ -1,0 +1,14 @@
+metadata:
+  database: postgres
+  generated_at: '2026-11-13T10:15:08.332401+00:00'
+  generation_method: PostgreSQL schema analysis + NVIDIA Auto Ontology + NVIDIA hosted
+    LLM
+  entity_count: 0
+  relationship_count: 0
+  nvidia_entity_count: 9
+  warnings: []
+entities: []
+relationships: []
+nvidia_semantic_graph:
+  node_count: 9
+  link_count: 0
